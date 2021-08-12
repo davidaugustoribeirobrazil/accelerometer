@@ -1,0 +1,109 @@
+APÊNDICE A - Rotina Matlab: tratamento computacional no sinal original
+%% Teste 001 - Comando de importação de dados do labview.
+%% taxa de amostragem de 500 Hz na aquisição do labview.
+ 
+%%
+clear all; close all; clc; hold on; grid on;
+%-------------------------------------------------------------------------
+% Primeira repetição:
+load ex_1_1_1.txt;
+t = ex_1_1_1(:,1);
+a = ex_1_1_1(:,2);
+plot(t,a,'b')
+title('Signal Analysis')
+xlabel('Time');
+ylabel('Amplitude');
+legend('Accelerometer Output Signal');
+%-------------------------------------------------------------------------
+% Número de picos considerados
+n = 17;
+%-------------------------------------------------------------------------
+% csi - Razão de amortecimento
+a1 = 1.5922;
+a2 = 0.1840;
+csi = (1/(n*2*pi))*log(a1/a2)
+%-------------------------------------------------------------------------
+% td - Largura do período
+x2 = 3.5178;
+x1 = 2.7609;
+td = x2-x1
+%-------------------------------------------------------------------------
+% wd - Frequencia de amortecimento
+wd = 2*pi/td
+%-------------------------------------------------------------------------
+% wn - Frequencia natural
+wn = wd/(sqrt(1-csi^2))
+%-------------------------------------------------------------------------
+% co - Coeficiente de amortecimento
+% m1 = massa da regua 
+% m2 = massa do aceletometro
+% mt = massa total
+m1 = 34.845;
+m2 = 7.989;
+mt = m1+m2;
+co = 2*csi*mt*wn
+%-------------------------------------------------------------------------
+% cc - Coeficiente de amortecimento crítico
+cc = co/csi
+hold off
+
+
+APÊNDICE B - Rotina Matlab: filtro HP aplicado ao sinal original
+%%
+clear all; close all; clc; hold on;
+%-------------------------------------------------------------------------
+% Primeira repetição:
+load ex_1_1_1.txt;
+t = ex_1_1_1(:,1);
+a = ex_1_1_1(:,2);
+plot(t,a,'b')
+title('Signal Analysis')
+xlabel('Time');
+ylabel('Amplitude');
+legend('Accelerometer Output Signal');
+ 
+%HP Filter
+[Trend,Cyclical] = hpfilter(a);
+figure,subplot(3,1,1),plot(a)
+grid on
+title ('Resposta para a primeira repetição do modelo 03')
+hold on,subplot(3,1,2),plot(Trend)
+grid on
+title ('Componente de Tendência do Filtro HP')
+ylabel('Amplitude')
+subplot(3,1,3),plot(Cyclical)
+grid on
+title ('Componente Cíclica do Filtro HP')
+xlabel('Amostras')
+%-------------------------------------------------------------------------
+% Número de picos considerados
+n = 17;
+%-------------------------------------------------------------------------
+% csi - Razão de amortecimento
+a1 = 1.452;
+a2 = 0.1757;
+csi = (1/(n*2*pi))*log(a1/a2)
+%-------------------------------------------------------------------------
+% td - Largura do período
+x2 = 3.5178;
+x1 = 2.7609;
+td = x2-x1
+%-------------------------------------------------------------------------
+% wd - Frequencia de amortecimento
+wd = 2*pi/td
+%-------------------------------------------------------------------------
+% wn - Frequencia natural
+wn = wd/(sqrt(1-csi^2))
+%-------------------------------------------------------------------------
+% co - Coeficiente de amortecimento
+% m1 = massa da regua  % m2 = massa do aceletometro % mt = massa total
+m1 = 34.845;
+m2 = 7.989;
+mt = m1+m2;
+co = 2*csi*mt*wn
+%-------------------------------------------------------------------------
+% cc - Coeficiente de amortecimento crítico
+cc = co/csi
+hold off
+
+
